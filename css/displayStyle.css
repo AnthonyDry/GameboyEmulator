@@ -1,0 +1,38 @@
+#LCD 
+{
+	position: relative;
+	width: 1034px;
+	height: 401px;
+	/*background-color: #A49408;*/
+	
+	left:50%;
+	margin-left:-270px;
+}
+#CARTRIDGE{
+	position:absolute;
+	z-index:8000;
+	top:660px;
+	visibility:hidden;
+}
+.hidden{
+				visibility:hidden;
+				height:0px;
+				overflow:hidden;
+			}
+			.filler{
+				font-family:AtariFont monospace;
+			}
+			#note{
+				position:relative;
+				top:-350px;
+				text-align: center;
+				font-family:AtariFont;
+				color:rgba(0,0,0,0.7);
+				width:400px;
+				left:50%;
+				margin-left:-200px;
+				
+			}
+
+
+

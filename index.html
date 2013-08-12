@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<title>Gameboy thingy</title>
+		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/gameboyAndHeader.css" />
+		<link rel="stylesheet" type="text/css" href="css/displayStyle.css" />
+		<link rel="stylesheet" type="text/css" href="css/animationz.css" />
+		<script src="js/GBjs/toolbox.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/scrollbar.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.cpu.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.memory.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.rom.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.interrupts.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.input.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.lcd.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.timers.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.debugger.js" type="application/x-javascript"></script>
+		<script src="js/GBjs/jsgb.gameboy.js" type="application/x-javascript"></script>
+		<style type="text/css">
+			@font-face 
+			{
+				font-family: AtariFont;
+				src: url('PrStart.ttf');
+			}
+			@font-face 
+			{
+			    font-family: 'BrickFaces';
+			    src: url('megamanbrickz-webfont.eot');
+			    src: url('megamanbrickz-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('megamanbrickz-webfont.woff') format('woff'),
+			         url('megamanbrickz-webfont.ttf') format('truetype'),
+			         url('megamanbrickz-webfont.svg#megaman_.villanz') format('svg');
+			    font-weight: normal;
+			    font-style: normal;
+			}
+		</style>
+	</head>
+	<body>
+		<audio id="audio">
+		  <source src="music/gameboysound.ogg" type="audio/ogg">
+		  <source src="music/gameboysound.mp3" type="audio/mpeg">
+		Your browser does not support the audio element.
+		</audio>
+		<div id="header">
+			<h1>NOW YOU'RE PLAYING</h1>
+			<h2>WITH POWER!</h2>
+		 <!-- här ska det vara controls plzz-->
+		</div>
+		<div id="container">
+			<a id="On" href="#"><div id="onButton"></div></a>
+			<div id="wrapperShadow"><div id="wrapper">
+				<div id="wrapperhead">
+					<div class="lines" id="first"></div>
+					<div id="onAndOff">◄ OFF / ON ►</div>
+					<div class="lines" id="second"></div>
+					<div id="third"></div>	
+				</div>
+				<div id="displayborder">
+					<div id="displayName">
+						<div class="NameLines" id="nameLines1"></div>
+						<div id="displayNameText">DEVELOPED BY ANTHONY DRY</div>
+						<div class="NameLines" id="nameLines2"></div>
+					</div>
+					<div id="lamp"></div>
+					<canvas id="LCD">
+						<!-- Här ska själva spelet vara allt annat är design :) -->	
+					</canvas>
+					<p id="note">Utilizes the gbjs.js<br/>By: Pedro Ladaria<br/> &copy; 2009<br/>Since it's illegal to use real roms<br/> to demonstrate the emulator i suggest<br/> you fork the code from github<br/> and play your own roms. ;D <br/> Best regards! Anthony </p>
+					<select id="CARTRIDGE" rows="1" onchange="gb_Insert_Cartridge(this.value,true);">
+						<option value="mc-mrder.gb">PD mc-mrder</option>
+						<option value="20y.gb">PD 20y</option>
+						<option value="Ls.gb">PD Ls</option>
+						<option value="Bc.gb">PD Bc</option>
+						<option value="wario_walking.gb">PD wario_walking</option>
+						<option value="q-tsu.gb">PD q-tsu</option>
+						<option value="Tetris.gb">Tetris</option>
+						</select>
+				</div>
+				<div id="orginalGameboylogo">emulated <span>GAME BOY</span></div>
+				<div id="wrapperfooter">
+					<div id="arrowcontainer">
+						<table id="Arrows" cellspacing="0" cellpadding="0">
+							<tr>
+								<td></td>
+								<td class="visablearrows" id="arrowUp"><a class="filler" id="clickUp">W</a></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td class="visablearrows" id="arrowLeft"><a class="filler" id="clickLeft">A</a></td>
+								<td id="arrowCenter"><div></div></td>
+								<td class="visablearrows" id="arrowRight"><a class="filler" id="clickRight">D</a></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td  class="visablearrows" id="arrowDown"><a class="filler" id="clickDown">S</a></td>
+								<td></td>
+							</tr>
+							
+						</table>
+					</div>
+					<div id="startText">SPACE</div>
+					<div id="startButtonContainer">
+						<a id="startButton"></a>
+					</div>
+					<div id="actionButtonsContainer">
+						<a class="actionButton" id="Sbutton"></a>
+						<a class="actionButton" id="Abutton"></a>
+					</div>
+					<div id="actionButtonsText">NM</div>
+				</div>
+			</div>
+			<div class="hidden">
+				<div id="STATUS">Pause</div>
+				<div id="DEBUG">&nbsp;</div>
+				<input id="BR" type="button" value="Run"   onfocus="this.blur();" onclick="gb_Run();"/>
+				<input id="BP" type="button" value="Pause" onfocus="this.blur();" disabled onclick="gb_Pause();"/>
+				<input id="BS" type="button" value="Step"  onfocus="this.blur();" onclick="gb_Step();"/>
+				<input id="BS" type="button" value="Reset"  onfocus="this.blur();" onclick="gb_Insert_Cartridge($('CARTRIDGE').value,true);"/>
+				<input id="BX" type="button" value="Size x2" onfocus="this.blur();" onclick="gb_Resize_LCD();"/>
+				<br/>
+				<input id="TOGGLE_DEBUGGER" type="checkbox" onclick="gb_Toggle_Debugger(this.checked);" />
+				<label for="TOGGLE_DEBUGGER">debugger</label> | <a href="changelog.htm">changelog</a> | <a href="credits.htm">credits</a>
+				<div id="DEBUGGER"></div>
+			</div>
+			</div>
+		</div>
+		<a href="https://github.com/you"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png" alt="Fork me on GitHub"></a>
+		<script src="js/script.js" type="text/javascript"></script>
+		<script type="application/x-javascript">
+
+			var gbSeconds = 0;
+			var gbFrames  = 0;
+			
+			function gb_Resize_LCD() {
+			  if ($('BX').value=='Size x2') {
+			    $('BX').value='Size x3';
+			    $('LCD').style.width='320px';
+			    $('LCD').style.height='288px';
+			  }
+			  else if ($('BX').value=='Size x3') {
+			    $('BX').value='Size x1';
+			    $('LCD').style.width='480px';
+			    $('LCD').style.height='432px';
+			  }
+			  else {
+			    $('BX').value='Size x2';
+			    $('LCD').style.width='160px';
+			    $('LCD').style.height='144px';
+			  }
+			}
+			
+			function gb_Show_Fps() {
+			  gbFrames+=gbFPS;
+			  gbSeconds++;
+			  $('STATUS').innerHTML = 
+			    'Running: '+gbFPS+' '+
+			    'fps - Average: '+(gbFrames/gbSeconds).toFixed(2)+' - '+
+			    'Bank switches/s: '+gbBankSwitchCount;
+			  gbFPS=0;
+			  gbBankSwitchCount=0;
+			}
+			
+			function gb_Toggle_Debugger(show) {
+			  $('DEBUGGER').style.height=(show)?'auto':'0px';
+			}
+		</script>
+	</body>
+</html>
